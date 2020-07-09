@@ -4,8 +4,8 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status, generics
 
-from .serializers import ClienteSerializer
-from .models import Cliente
+from .serializers import ClienteSerializer, ProblemaSerializer, ProdutoSerializer
+from .models import Cliente, Problema, Produto
 
 # Create your views here.
 def index(request):
@@ -58,3 +58,51 @@ class ClienteUpdate(generics.ListCreateAPIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)        
+
+class ProblemaView(generics.ListAPIView):
+
+    queryset = Problema.objects.all()
+    serializer_class = ProblemaSerializer
+  
+    def get(self, request, format=None):   
+        try:
+            problema    = Problema.objects.all()
+            serializer = ProblemaSerializer(problema, many=True)
+            return Response(serializer.data)    
+        except:
+            errorMessage = "Erro não for encontrado"
+            return Response(errorMessage)             
+
+class ProblemaProdutoView(generics.ListAPIView):
+
+    queryset = Problema.objects.all()
+    serializer_class = ProblemaSerializer
+
+    def get(self, request, pk, format=None):   
+        try:      
+       
+            #produto = get_object_or_404(Produto, id=pk)
+            #problema    = Problema.objects.all()
+            problema    = Problema.objects.filter(id_produto=pk)
+
+            serializer = ProblemaSerializer(problema, many=True)
+            return Response(serializer.data)    
+        except:
+            errorMessage = "Erro não for encontrado"
+            return Response(errorMessage)   
+
+
+
+class ProdutoView(generics.ListAPIView):
+
+    queryset = Produto.objects.all()
+    serializer_class = ProdutoSerializer
+  
+    def get(self, request, format=None):   
+        try:
+            produto    = Produto.objects.all()
+            serializer = ProdutoSerializer(produto, many=True)
+            return Response(serializer.data)    
+        except:
+            errorMessage = "Erro não for encontrado"
+            return Response(errorMessage)                 

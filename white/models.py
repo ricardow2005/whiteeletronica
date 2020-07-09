@@ -13,3 +13,20 @@ class Cliente(models.Model):
     telefone1 = models.CharField(max_length=11, blank=True)
     telefone2 = models.CharField(max_length=11, blank=True)
     email = models.CharField(max_length=200, blank=True)
+
+class Produto(models.Model):
+    id = models.AutoField(primary_key=True)
+    id_cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    name = models.CharField(max_length=400, blank=True)
+    marca = models.CharField(max_length=40, blank=True)
+    modelo = models.CharField(max_length=40, blank=True)
+ 
+class Problema(models.Model):
+    id = models.AutoField(primary_key=True)
+    id_produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
+    descricao = models.CharField(max_length=400)
+    data_entrega = models.DateField()
+    data_conserto = models.DateField(blank=True)
+    resolucao = models.CharField(max_length=400, blank=True)
+
+ 
